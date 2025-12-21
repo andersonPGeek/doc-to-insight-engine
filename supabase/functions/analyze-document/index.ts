@@ -90,35 +90,41 @@ serve(async (req) => {
   }
 
   try {
-    const { text, fileName, fileType, wordCount, fileSize } = await req.json();
+    const { text, fileName, fileType, wordCount, fileSize, model = 'gemini-flash' } = await req.json();
     
-    console.log('Starting document analysis:', { fileName, wordCount });
+    console.log('Starting document analysis:', { fileName, wordCount, model });
     
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     if (!LOVABLE_API_KEY) {
       throw new Error('LOVABLE_API_KEY is not configured');
     }
 
-    const systemPrompt = `Você é um especialista em análise de documentos jurídicos brasileiros. Sua tarefa é extrair informações estruturadas de petições, contratos, sentenças e outros documentos legais.
+    // Model mapping for faster processing
+    const modelMap: Record<string, string> = {
+      'gemini-flash': 'google/gemini-2.5-flash',
+      'gemini-pro': 'google/gemini-2.5-pro',
+      'gpt-5': 'openai/gpt-5',
+      'gpt-5-mini': 'openai/gpt-5-mini',
+    };
 
-Analise o documento fornecido e preencha o seguinte schema JSON:
+    const selectedModel = modelMap[model] || 'google/gemini-2.5-flash';
+    console.log('Using model:', selectedModel);
 
+    const systemPrompt = `Você é um especialista em análise de documentos jurídicos brasileiros. Extraia informações estruturadas rapidamente.
+
+Schema JSON esperado:
 ${SCHEMA_TEMPLATE}
 
-INSTRUÇÕES IMPORTANTES:
-1. Extraia TODAS as entidades jurídicas mencionadas (partes, advogados, testemunhas, etc.)
-2. Identifique TODAS as citações de leis, artigos e normas
-3. Forneça sugestões de melhorias para parágrafos importantes
-4. Se houver dados quantitativos ou temporais, crie gráficos e timelines
-5. O campo "conteudo_texto" deve conter o texto formatado em HTML
-6. Use ícones placeholder como "https://exemplo.com/icones/[nome].png"
-7. Classifique corretamente o tipo de documento na categoria_ia
-8. Gere valores realistas para id, user_id e projeto_id (números inteiros)
-9. As datas devem estar no formato ISO (YYYY-MM-DDTHH:mm:ss.000000Z)
-10. O tamanho do arquivo deve ser "${fileSize}"
-11. A quantidade de palavras é ${wordCount}
+INSTRUÇÕES (seja direto e eficiente):
+- Extraia entidades jurídicas (partes, advogados, testemunhas)
+- Identifique citações de leis e artigos
+- Forneça 2-3 sugestões de melhorias
+- Crie timeline se houver datas relevantes
+- O conteudo_texto deve ser HTML formatado
+- Use "https://exemplo.com/icones/[nome].png" para ícones
+- Tamanho: "${fileSize}", Palavras: ${wordCount}
 
-RESPONDA APENAS COM O JSON VÁLIDO, SEM EXPLICAÇÕES ADICIONAIS.`;
+RESPONDA APENAS COM JSON VÁLIDO.`;
 
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
@@ -127,10 +133,10 @@ RESPONDA APENAS COM O JSON VÁLIDO, SEM EXPLICAÇÕES ADICIONAIS.`;
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-pro',
+        model: selectedModel,
         messages: [
           { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Analise o seguinte documento jurídico e extraia as informações no formato JSON especificado:\n\nNome do arquivo: ${fileName}\nTipo: ${fileType}\n\n${text}` }
+          { role: 'user', content: `Analise este documento jurídico:\n\nArquivo: ${fileName} (${fileType})\n\n${text}` }
         ],
       }),
     });
