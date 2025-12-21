@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { Scale, FileSearch, Sparkles } from "lucide-react";
+import { Scale, FileSearch, Sparkles, Zap, Brain } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FileUpload } from "@/components/FileUpload";
 import { StageTimer } from "@/components/StageTimer";
@@ -7,6 +7,22 @@ import { JsonViewer } from "@/components/JsonViewer";
 import { parseDocument, ParsedDocument } from "@/lib/documentParser";
 import { ProcessingStage, ProcessingResult } from "@/types/document";
 import { toast } from "sonner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+type ModelOption = 'gemini-flash' | 'gemini-pro' | 'gpt-5' | 'gpt-5-mini';
+
+const MODEL_OPTIONS: { value: ModelOption; label: string; description: string }[] = [
+  { value: 'gemini-flash', label: 'Gemini Flash', description: 'Mais rápido (~30s)' },
+  { value: 'gemini-pro', label: 'Gemini Pro', description: 'Mais preciso (~2min)' },
+  { value: 'gpt-5', label: 'GPT-5', description: 'OpenAI Premium' },
+  { value: 'gpt-5-mini', label: 'GPT-5 Mini', description: 'OpenAI Rápido' },
+];
 
 const INITIAL_STAGES: ProcessingStage[] = [
   { id: 'upload', name: 'Upload do Arquivo', status: 'pending' },
@@ -21,6 +37,7 @@ const Index = () => {
   const [stages, setStages] = useState<ProcessingStage[]>(INITIAL_STAGES);
   const [result, setResult] = useState<ProcessingResult | null>(null);
   const [parsedDoc, setParsedDoc] = useState<ParsedDocument | null>(null);
+  const [selectedModel, setSelectedModel] = useState<ModelOption>('gemini-flash');
 
   const updateStage = useCallback((
     stageId: string, 
@@ -102,6 +119,7 @@ const Index = () => {
             fileType: parsed.fileType,
             wordCount: parsed.wordCount,
             fileSize: parsed.fileSize,
+            model: selectedModel,
           }),
         }
       );
@@ -113,6 +131,9 @@ const Index = () => {
 
       const analysisResult = await response.json();
       completeStage('analysis', analysisStart);
+      
+      const modelLabel = MODEL_OPTIONS.find(m => m.value === selectedModel)?.label || selectedModel;
+      toast.success(`Análise concluída com ${modelLabel}`);
 
       // Stage 4: Formatting
       const formattingStart = Date.now();
@@ -187,15 +208,37 @@ const Index = () => {
             />
           </div>
 
-          {/* Process Button */}
+          {/* Model Selection & Process Button */}
           {selectedFile && !isProcessing && !result && (
-            <div className="flex justify-center mb-8 animate-scale-in">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8 animate-scale-in">
+              <div className="flex items-center gap-3">
+                <Brain className="w-5 h-5 text-primary" />
+                <Select
+                  value={selectedModel}
+                  onValueChange={(value: ModelOption) => setSelectedModel(value)}
+                >
+                  <SelectTrigger className="w-[200px] bg-card border-border">
+                    <SelectValue placeholder="Selecione o modelo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {MODEL_OPTIONS.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        <div className="flex flex-col">
+                          <span className="font-medium">{option.label}</span>
+                          <span className="text-xs text-muted-foreground">{option.description}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              
               <Button
                 size="lg"
                 onClick={processDocument}
                 className="gradient-gold text-primary-foreground font-semibold px-8 py-6 text-lg shadow-glow hover:shadow-elevated transition-all duration-300"
               >
-                <FileSearch className="w-5 h-5 mr-2" />
+                <Zap className="w-5 h-5 mr-2" />
                 Processar Documento
               </Button>
             </div>
