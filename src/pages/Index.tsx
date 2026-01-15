@@ -42,9 +42,16 @@ interface VisualResult {
   elementsFound: string[];
 }
 
+interface ColorScheme {
+  primary: string;
+  accent: string;
+  background: string;
+}
+
 const Index = () => {
   const [currentStep, setCurrentStep] = useState<Step>('template');
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
+  const [customColors, setCustomColors] = useState<ColorScheme | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [stages, setStages] = useState<ProcessingStage[]>(INITIAL_STAGES);
@@ -74,6 +81,11 @@ const Index = () => {
 
   const handleTemplateSelect = useCallback((template: Template) => {
     setSelectedTemplate(template);
+    setCustomColors(template.colorScheme);
+  }, []);
+
+  const handleColorsChange = useCallback((colors: ColorScheme) => {
+    setCustomColors(colors);
   }, []);
 
   const handleFileSelect = useCallback((file: File) => {
@@ -93,6 +105,7 @@ const Index = () => {
   const handleReset = useCallback(() => {
     setCurrentStep('template');
     setSelectedTemplate(null);
+    setCustomColors(null);
     setSelectedFile(null);
     setResult(null);
     setParsedDoc(null);
@@ -157,7 +170,7 @@ const Index = () => {
             model: selectedModel,
             templateId: selectedTemplate.id,
             templateCss: templateCss,
-            templateColors: selectedTemplate.colorScheme,
+            templateColors: customColors || selectedTemplate.colorScheme,
             mode: 'visual',
           }),
         }
@@ -284,6 +297,8 @@ const Index = () => {
               <TemplateSelector
                 selectedTemplate={selectedTemplate}
                 onSelect={handleTemplateSelect}
+                customColors={customColors || undefined}
+                onColorsChange={handleColorsChange}
               />
 
               {selectedTemplate && (
