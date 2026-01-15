@@ -42,10 +42,12 @@ serve(async (req) => {
       templateId,
       templateCss,
       templateColors,
-      mode = 'json'
+      mode = 'json',
+      title,
+      description
     } = await req.json();
     
-    console.log('Starting document analysis:', { fileName, wordCount, model, mode, templateId });
+    console.log('Starting document analysis:', { fileName, wordCount, model, mode, templateId, title });
     
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     if (!LOVABLE_API_KEY) {
@@ -65,7 +67,61 @@ serve(async (req) => {
     let systemPrompt: string;
     let userPrompt: string;
 
-    if (mode === 'visual') {
+    if (mode === 'generate-template') {
+      // Generate a new template based on title and description
+      systemPrompt = `Você é um especialista em Visual Law e design jurídico. Sua tarefa é criar um template HTML/CSS completo para documentos jurídicos.
+
+ELEMENTOS VISUAIS QUE O TEMPLATE DEVE DEMONSTRAR:
+${VISUAL_ELEMENTS.map(el => `- ${el}`).join('\n')}
+
+INSTRUÇÕES:
+1. Crie um template de documento jurídico profissional baseado no título e descrição
+2. Inclua exemplos de TODOS os elementos visuais possíveis (timeline, gráficos, tabelas, etc.)
+3. Use cores profissionais e harmoniosas
+4. O template deve ter estrutura de documento jurídico: cabeçalho, seções, rodapé
+5. Gere conteúdo de exemplo relevante ao tipo de documento
+6. Use SVG inline para gráficos
+7. CSS deve ser moderno e responsivo
+
+FORMATO DE RESPOSTA (JSON):
+{
+  "html": "<div class='document'>... HTML completo do template com todos os elementos ...</div>",
+  "css": "/* CSS completo do template */",
+  "colorScheme": {
+    "primary": "#hexcolor",
+    "accent": "#hexcolor", 
+    "background": "#ffffff"
+  }
+}
+
+EXEMPLOS DE ESTILOS:
+- Use variáveis CSS quando possível
+- Fonte padrão: 'Open Sans', sans-serif
+- Layout: max-width: 900px; margin: auto
+- Cards: border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1)
+
+RESPONDA APENAS COM JSON VÁLIDO, sem markdown.`;
+
+      userPrompt = `Crie um template Visual Law para:
+
+TÍTULO: ${title}
+DESCRIÇÃO: ${description || 'Documento jurídico profissional'}
+
+O template deve incluir exemplos de:
+- Cabeçalho institucional
+- Timeline de eventos/fatos
+- Gráfico de barras ou pizza (SVG)
+- Tabela de dados
+- Infográfico com ícones
+- Destaque/citação
+- Checklist
+- Barra de progresso
+- Fluxograma simples
+- Seção de resumo
+
+Gere um documento completo de exemplo que demonstre esses elementos no contexto do tipo de documento solicitado.`;
+
+    } else if (mode === 'visual') {
       systemPrompt = `Você é um especialista em Visual Law e design jurídico. Sua tarefa é transformar documentos de texto simples em HTML estilizado e visualmente rico.
 
 ELEMENTOS VISUAIS QUE VOCÊ DEVE IDENTIFICAR E GERAR:
@@ -244,6 +300,19 @@ ${text}`;
           throw new Error('Não foi possível extrair JSON da resposta');
         }
       }
+    }
+
+    // For generate-template mode
+    if (mode === 'generate-template') {
+      jsonResult = {
+        html: jsonResult.html || '<div class="document"><p>Template gerado</p></div>',
+        css: jsonResult.css || '',
+        colorScheme: jsonResult.colorScheme || {
+          primary: '#2c3e50',
+          accent: '#3498db',
+          background: '#ffffff',
+        },
+      };
     }
 
     // For visual mode, ensure we have all required fields
