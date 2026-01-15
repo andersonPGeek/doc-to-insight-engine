@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Petição - Réplica Layout 360</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2c3e50; /* Azul escuro sóbrio */
+            --secondary: #c0392b; /* Tom de destaque (opcional, ou cinza) */
+            --accent: #16a085; /* Verde petróleo para elementos 360 */
+            --text-dark: #333333;
+            --text-light: #7f8c8d;
+            --bg-page: #ffffff;
+            --bg-body: #e9ecef;
+            --border-radius: 6px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            font-family: 'Open Sans', sans-serif;
+            color: var(--text-dark);
+            -webkit-print-color-adjust: exact;
+        }
+
+        /* Configuração da Página A4 */
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm;
+            margin: 20px auto;
+            background: var(--bg-page);
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Elementos de Cabeçalho */
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .logo-360 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 2rem;
+            color: var(--text-dark);
+            border: 2px solid var(--text-dark);
+            padding: 5px 10px;
+            border-radius: 50%; /* Simulando o logo circular 360 */
+        }
+
+        .court-address {
+            text-align: right;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            width: 60%;
+        }
+
+        .action-name {
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            margin: 20px 0 30px 0;
+            color: var(--primary);
+            letter-spacing: 1px;
+        }
+
+        /* Qualificação das Partes (Lado a Lado conforme Legal Design) */
+        .qualification-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .party-box {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: var(--border-radius);
+            padding: 15px;
+        }
+
+        .party-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+            border-bottom: 2px solid var(--accent);
+            display: inline-block;
+            padding-bottom: 3px;
+        }
+
+        .party-content {
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        /* Títulos de Seção (Estilo: TÍTULO | Subtítulo) */
+        .section-header {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-left: 5px solid var(--primary);
+            padding-left: 15px;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .section-subtitle {
+            font-weight: 300;
+            color: var(--text-light);
+            margin-left: 5px;
+        }
+
+        /* Texto Padrão */
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+            line-height: 1.6;
+        }
+
+        /* Rodapé de Contato (Página 1) */
+        .footer-contact {
+            margin-top: auto; /* Empurra para o fundo da página 1 */
+            background-color: var(--primary);
+            color: #fff;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            font-size: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-address, .footer-digital {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        /* Estilo da Citação (Artigos) */
+        .citation-box {
+            background-color: #e8f6f3; /* Fundo suave */
+            border-left: 4px solid var(--accent);
+            padding: 15px 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #555;
+            position: relative;
+        }
+
+        .citation-box::before {
+            content: "“";
+            font-size: 3rem;
+            color: var(--accent);
+            opacity: 0.3;
+            position: absolute;
+            top: -10px;
+            left: 10px;
+        }
+
+        /* Lista de Pedidos */
+        .requests-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .requests-list li {
+            margin-bottom: 12px;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .requests-list li::before {
+            content: attr(data-marker);
+            position: absolute;
+            left: 0;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Valor da Causa */
+        .value-cause-box {
+            border: 2px dashed var(--primary);
+            padding: 20px;
+            text-align: center;
+            margin: 30px auto;
+            max-width: 60%;
+            border-radius: var(--border-radius);
+            background-color: #fff;
+        }
+
+        .value-title {
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 5px;
+        }
+
+        .value-number {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        /* Assinatura */
+        .signature-block {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .signature-line {
+            display: inline-block;
+            border-top: 1px solid var(--text-dark);
+            padding-top: 10px;
+            width: 300px;
+            font-weight: 700;
+        }
+
+        /* Utilitários */
+        .page-break {
+            page-break-before: always;
+            margin-top: 40px; /* Visual gap na tela */
+            border-top: 1px dashed #ccc; /* Visual aid na tela */
+            padding-top: 40px;
+            display: block;
+        }
+
+        /* Adaptação para Impressão */
+        @media print {
+            body { background: none; }
+            .page { 
+                margin: 0; 
+                box-shadow: none; 
+                width: 100%; 
+                height: auto; 
+                padding: 0; /* Margens são controladas pelo browser */
+            }
+            .page-break { 
+                border: none; 
+                margin: 0; 
+                padding: 0; 
+                height: 0; 
+            }
+            .footer-contact { -webkit-print-color-adjust: exact; }
+            .citation-box { -webkit-print-color-adjust: exact; }
+            .party-box { -webkit-print-color-adjust: exact; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page">
+        <header class="header-top">
+            <div class="logo-360">360</div>
+            <div class="court-address">
+                AO JUÍZO DA 1ª VARA DE<br>
+                BELO HORIZONTE/MG
+            </div>
+        </header>
+
+        <h1 class="action-name">NOME DA AÇÃO</h1>
+
+        <section class="qualification-container">
+            <div class="party-box">
+                <div class="party-title">Requerente</div>
+                <div class="party-content">
+                    <strong>FULANO DE TAL</strong><br>
+                    (nacionalidade), (estado civil), (profissão)<br>
+                    RG nº: XXXXXXXX, CPF nº: XXX.XXX.XXX-XX<br>
+                    End.: Rua (endereço completo), Cidade: CEP: 12345645.<br>
+                    WhatsApp: (XX) 9-XXXX-XXXX<br>
+                    e-mail: fulano@tal
+                </div>
+            </div>
+
+            <div class="party-box">
+                <div class="party-title">Requerido</div>
+                <div class="party-content">
+                    <strong>CICLANO DE TAL</strong><br>
+                    (nacionalidade), (estado civil), (profissão)<br>
+                    RG nº: XXXXXXXX, CPF nº: XXX.XXX.XXX-XX<br>
+                    End.: Rua (endereço completo), Cidade: CEP: 12345645.<br>
+                    WhatsApp: (XX) 9-XXXX-XXXX<br>
+                    e-mail: fulano@tal
+                </div>
+            </div>
+        </section>
+
+        <p>
+            Vem, respeitosamente, à presença de Vossa Excelência, por meio de seu advogado, nos termos da procuração em anexo:
+        </p>
+
+        <div class="section-header">
+            <span class="section-title">GRATUIDADE DA JUSTIÇA</span> 
+            <span class="section-subtitle">| Despesas altas</span>
+        </div>
+
+        <p>
+            Preliminarmente, a (o) requerente declara para todos os fins de direito e sob as penas da lei, que não tem condições de arcar com as despesas inerentes a este processo, sem prejuízo do seu sustento e de sua família.
+        </p>
+        <p>
+            Necessita, portanto, da Gratuidade da Justiça, nos termos do inciso LXXIV, do art. 5º da Constituição Federal (CF) c/c art. 98 e seguintes da Lei 13.105/2015 (Código de Processo Civil - CPC), o que desde já requer.
+        </p>
+
+        <footer class="footer-contact">
+            <div class="footer-address">
+                <strong>ENDEREÇO DO ESCRITÓRIO</strong>
+                <span>Rua do Advogado, 999, Cidade - XX</span>
+                <span>CEP: 89203-100</span>
+            </div>
+            <div class="footer-digital">
+                <span>(99) 99999999 | (99) 999999999</span>
+                <span>seuemail@seuemail.com.br</span>
+                <span>seusite.com.br</span>
+            </div>
+        </footer>
+    </div>
+
+    <div class="page">
+        
+        <div class="section-header">
+            <span class="section-title">FATOS</span> 
+            <span class="section-subtitle">| Falta de pagamento</span>
+        </div>
+
+        <p><em>(Nota: Inicie sempre os fatos na página posterior, deixa a primeira página apenas para a apresentação das partes e o nome da peça.)</em></p>
+
+        <p>Nos fatos você deve detalhar tudo que aconteceu que o fez chegar a presente ação, abaixo segue os três principais pontos que clarificam a situação:</p>
+
+        <div style="margin-left: 20px;">
+            <p><strong>• Fato 1:</strong> Descrição detalhada do primeiro evento.</p>
+            <p><strong>• Fato 2:</strong> Descrição detalhada do segundo evento.</p>
+            <p><strong>• Fato 3:</strong> Descrição detalhada do terceiro evento.</p>
+        </div>
+
+        <div class="section-header">
+            <span class="section-title">DIREITO</span> 
+            <span class="section-subtitle">| Art. 186 CC</span>
+        </div>
+
+        <p>Na fundamentação você deve invocar a legislação que ampara o seu pedido, devendo sempre a citação de artigos e doutrinas serem recuadas conforme exemplo abaixo:</p>
+
+        <div class="citation-box">
+            <strong>Art. 186.</strong> Aquele que, por ação ou omissão voluntária, negligência ou imprudência, violar direito e causar dano a outrem, ainda que exclusivamente moral, comete ato ilícito.
+        </div>
+
+        <p>Argumentação jurídica adicional conectando os fatos à legislação citada acima...</p>
+    </div>
+
+    <div class="page">
+        
+        <div class="section-header">
+            <span class="section-title">PEDIDOS E REQUERIMENTOS</span>
+        </div>
+
+        <p>Mediante o exposto, pede e requer:</p>
+
+        <ul class="requests-list">
+            <li data-marker="a)">Que seja deferido os benefícios da gratuidade da justiça nos termos do inciso LXXIV, do art. 5º da Constituição Federal (CF), conforme declaração em apenso.</li>
+            <li data-marker="b)">Que seja concedido o benefício do prazo em dobro, nos termos do artigo 186, § 3º do Código de Processo Civil - CPC, para todas as manifestações processuais.</li>
+            <li data-marker="c)">Que seja julgado procedente o pedido principal da ação (descrever o pedido principal aqui).</li>
+            <li data-marker="d)">Se for um divórcio, lembre de perguntar se a mulher deseja voltar a usar seu nome de solteira.</li>
+            <li data-marker="e)">Se for menor, manifestação do Ministério Público (MP) e definição de pensão, guarda e visitas.</li>
+            <li data-marker="f)">A citação do réu e requerer a justiça gratuita.</li>
+            <li data-marker="g)">Confirmação de todos os pedidos feitos no decorrer da petição.</li>
+            <li data-marker="h)">Requer a condenação da parte ré, ao pagamento de honorários sucumbenciais, nos termos do artigo 85 do Código de Processo Civil - CPC.</li>
+        </ul>
+
+        <div class="value-cause-box">
+            <div class="value-title">VALOR DA CAUSA</div>
+            <div class="value-number">R$ XXXXX, XX</div>
+            <div style="font-size: 0.9rem; margin-top: 5px;">(valor por extenso)</div>
+        </div>
+        <p style="text-align: center; font-size: 0.8rem; color: #777;">(Artigo 292 do CPC)</p>
+
+        <div class="signature-block">
+            <p>Nestes termos,</p>
+            <p>Pede e Espera Deferimento.</p>
+            <br><br>
+            <p>Cidade/UF, data do protocolo eletrônico.</p>
+            <br>
+            <div class="signature-line">
+                NOME DO ADVOGADO<br>
+                <span style="font-weight: 400; font-size: 0.9rem;">OAB/UF XXXX</span>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

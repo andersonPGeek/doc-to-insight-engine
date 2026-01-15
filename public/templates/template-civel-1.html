@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modelo Visual Law - Cível</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Merriweather:wght@300;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- CSS VARS PARA CUSTOMIZAÇÃO FÁCIL --- */
+        :root {
+            --primary-color: #2c3e50; /* Azul Navy Corporativo */
+            --accent-color: #e67e22; /* Laranja para destaque (Call to Action) */
+            --bg-light: #f4f6f7;
+            --text-dark: #333;
+            --white: #ffffff;
+            --border-radius: 8px;
+            --page-width: 210mm; /* A4 */
+            --sidebar-width: 25%;
+        }
+
+        /* --- RESET E GERAL --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: #e0e0e0; /* Fundo cinza para visualização na tela */
+            color: var(--text-dark);
+            line-height: 1.6;
+            -webkit-print-color-adjust: exact; /* Garante impressão das cores de fundo */
+            print-color-adjust: exact;
+        }
+
+        /* --- CONTAINER A4 --- */
+        .page-container {
+            width: var(--page-width);
+            min-height: 297mm;
+            background: var(--white);
+            margin: 20px auto;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            display: flex;
+            overflow: hidden; /* Mantém tudo dentro da página */
+        }
+
+        /* --- LAYOUT SIDEBAR (COLUNA LATERAL) --- */
+        aside.sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            font-size: 0.9rem;
+        }
+
+        .sidebar-header { margin-bottom: 30px; text-align: center; }
+        .sidebar-logo { font-size: 2rem; margin-bottom: 10px; color: var(--accent-color); }
+        
+        .sidebar-section { margin-bottom: 30px; }
+        .sidebar-section h3 {
+            color: var(--accent-color);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 5px;
+        }
+
+        .info-item { margin-bottom: 15px; }
+        .info-item i { color: var(--accent-color); margin-right: 8px; width: 20px; text-align: center;}
+        .info-item span { display: block; font-weight: 700; font-size: 1rem; margin-top: 2px;}
+        .info-item small { opacity: 0.8; font-size: 0.8rem;}
+
+        /* --- CONTEÚDO PRINCIPAL --- */
+        main.content {
+            flex: 1;
+            padding: 40px 50px;
+            position: relative;
+        }
+
+        /* --- CABEÇALHO DA PETIÇÃO --- */
+        header.doc-header {
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .juizo { font-family: 'Merriweather', serif; font-weight: 700; color: var(--primary-color); font-size: 1.1rem; max-width: 70%; }
+        .doc-meta { text-align: right; font-size: 0.85rem; color: #666; }
+        .doc-tag { 
+            background: var(--primary-color); 
+            color: var(--white); 
+            padding: 5px 10px; 
+            border-radius: 4px; 
+            font-weight: bold; 
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        /* --- TIPOGRAFIA --- */
+        h1 { font-family: 'Merriweather', serif; color: var(--primary-color); font-size: 1.8rem; margin-bottom: 10px; }
+        h2 { color: var(--primary-color); font-size: 1.3rem; margin-top: 30px; margin-bottom: 15px; border-left: 5px solid var(--accent-color); padding-left: 15px; }
+        p { margin-bottom: 15px; text-align: justify; }
+
+        /* --- ELEMENTOS VISUAIS --- */
+        
+        /* 1. Caixa de Destaque (Fatos/Resumo) */
+        .highlight-box {
+            background-color: var(--bg-light);
+            border-left: 4px solid var(--primary-color);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+
+        /* 2. Linha do Tempo (Vertical Simplificada) */
+        .timeline { margin: 30px 0; padding-left: 10px; }
+        .timeline-item {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 20px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            z-index: 2;
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 5px;
+            bottom: -25px; /* Conecta com o próximo */
+            width: 2px;
+            background: #ddd;
+            z-index: 1;
+        }
+        .timeline-item:last-child::after { display: none; }
+        .timeline-date { font-weight: bold; color: var(--primary-color); display: block; margin-bottom: 4px;}
+
+        /* 3. Jurisprudência/Citação */
+        blockquote.legal-quote {
+            font-family: 'Merriweather', serif;
+            font-style: italic;
+            color: #555;
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.05);
+            margin: 20px 0;
+        }
+
+        /* 4. Grid de Pedidos */
+        .requests-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .request-card {
+            border: 1px solid #eee;
+            background: var(--bg-light);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: flex-start;
+        }
+        .request-card i { color: var(--primary-color); font-size: 1.2rem; margin-right: 10px; margin-top: 3px; }
+        .request-card strong { display: block; color: var(--primary-color); margin-bottom: 5px; }
+
+        /* --- FOOTER --- */
+        footer { margin-top: 50px; border-top: 1px solid #ddd; padding-top: 20px; text-align: center; }
+        .signature-line { width: 200px; height: 1px; background: #000; margin: 0 auto 10px auto; }
+
+        /* --- MEDIA QUERY PARA IMPRESSÃO --- */
+        @media print {
+            body { background: none; margin: 0; }
+            .page-container { width: 100%; box-shadow: none; margin: 0; min-height: auto; }
+            /* Quebra de página */
+            .page-break { page-break-before: always; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-container">
+        
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo"><i class="fas fa-balance-scale"></i></div>
+                <div>Advocacia & Design</div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Resumo do Caso</h3>
+                <div class="info-item">
+                    <small>Ação</small>
+                    <span>Indenização por Danos Morais</span>
+                </div>
+                <div class="info-item">
+                    <small>Valor da Causa</small>
+                    <span>R$ 15.000,00</span>
+                </div>
+                <div class="info-item">
+                    <small>Prioridade</small>
+                    <span>Estatuto do Idoso</span>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Status</h3>
+                <div class="info-item">
+                    <i class="fas fa-check-circle"></i> Tutela de Urgência
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-file-invoice-dollar"></i> Justiça Gratuita
+                </div>
+            </div>
+
+            <div style="margin-top: auto;">
+                <div class="sidebar-section">
+                    <h3>Contato</h3>
+                    <div class="info-item">
+                        <i class="fas fa-envelope"></i> email@escritorio.com
+                    </div>
+                    <div class="info-item">
+                        <i class="fab fa-whatsapp"></i> (11) 99999-9999
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="content">
+            
+            <header class="doc-header">
+                <div class="juizo">
+                    AO JUÍZO DA VARA CÍVEL DA COMARCA DE [CIDADE/ESTADO]
+                </div>
+                <div class="doc-meta">
+                    <span class="doc-tag">Petição Inicial</span>
+                    <br><br>
+                    Processo nº: <strong>[NOVO]</strong>
+                </div>
+            </header>
+
+            <h1>Ação Indenizatória</h1>
+            <p style="font-size: 0.9rem; color: #666;">
+                <strong>Autor:</strong> [Nome do Cliente] <br>
+                <strong>Réu:</strong> [Nome da Empresa/Parte Contrária]
+            </p>
+
+            <div class="highlight-box">
+                <strong><i class="fas fa-info-circle"></i> O QUE VOCÊ PRECISA SABER (RESUMO)</strong>
+                <p style="margin-top: 10px; margin-bottom: 0;">
+                    O Autor teve seu nome negativado indevidamente pela Ré, mesmo após ter cancelado o contrato e pago todas as faturas. Busca-se a declaração de inexistência de débito e indenização por danos morais.
+                </p>
+            </div>
+
+            <h2>1. Da Narrativa Fática</h2>
+            <p>A relação jurídica entre as partes iniciou-se em [DATA], pautada na boa-fé. Contudo, a Ré falhou gravemente na prestação de serviços.</p>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <span class="timeline-date">10/Jan/2023</span>
+                    Solicitação de cancelamento do serviço via protocolo nº 123456.
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-date">15/Jan/2023</span>
+                    Pagamento da fatura final e confirmação de "Nada Consta".
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-date">20/Fev/2023</span>
+                    Surpresa com a notificação de negativação no SPC/Serasa.
+                </div>
+            </div>
+
+            <h2>2. Do Direito</h2>
+            <p>A conduta da Ré viola frontalmente o Código de Defesa do Consumidor.</p>
+
+            <blockquote class="legal-quote">
+                "A inscrição indevida em cadastro de inadimplentes enseja dano moral in re ipsa, ou seja, presumido."
+                <br><strong>(Súmula 385 - STJ / Entendimento Consolidado)</strong>
+            </blockquote>
+
+            <p>Não se trata de mero aborrecimento, mas de violação à honra objetiva do consumidor, que se viu impedido de obter crédito na praça.</p>
+
+            <h2>3. Dos Pedidos</h2>
+            <p>Diante do exposto, requer a Vossa Excelência:</p>
+
+            <div class="requests-grid">
+                <div class="request-card">
+                    <i class="fas fa-gavel"></i>
+                    <div>
+                        <strong>Procedência Total</strong>
+                        Para declarar a inexistência do débito de R$ 500,00.
+                    </div>
+                </div>
+                <div class="request-card">
+                    <i class="fas fa-hand-holding-usd"></i>
+                    <div>
+                        <strong>Danos Morais</strong>
+                        Condenação ao pagamento de R$ 10.000,00 (caráter punitivo-pedagógico).
+                    </div>
+                </div>
+                <div class="request-card">
+                    <i class="fas fa-bolt"></i>
+                    <div>
+                        <strong>Tutela de Urgência</strong>
+                        Para imediata baixa na negativação (5 dias), sob pena de multa.
+                    </div>
+                </div>
+                <div class="request-card">
+                    <i class="fas fa-comments-dollar"></i>
+                    <div>
+                        <strong>Honorários</strong>
+                        Condenação da Ré em custas e honorários sucumbenciais (20%).
+                    </div>
+                </div>
+            </div>
+
+            <footer>
+                <div class="signature-line"></div>
+                <p><strong>[Nome do Advogado]</strong><br>OAB/UF nº 00.000</p>
+            </footer>
+
+        </main>
+    </div>
+
+</body>
+</html>
