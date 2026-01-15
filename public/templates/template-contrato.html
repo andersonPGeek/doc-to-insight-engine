@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contrato de Prestação de Serviços - Visual Law</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* CONFIGURAÇÕES GERAIS E RESET */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --brand-blue: #2c5282;      /* Azul Escuro Institucional */
+            --brand-orange: #f6ad55;    /* Laranja (Fundo ícones) */
+            --brand-light-blue: #bee3f8; /* Azul Claro (Detalhes) */
+            --brand-grey-bg: #f7fafc;   /* Fundo cinza suave */
+            --text-main: #2d3748;
+            --text-light: #718096;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #e2e8f0;
+            color: var(--text-main);
+            font-size: 10.5pt;
+            line-height: 1.6;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            padding: 20px 0;
+        }
+
+        /* ESTRUTURA DA PÁGINA A4 */
+        .page {
+            width: 210mm;
+            height: 297mm;
+            background: var(--white);
+            margin: 0 auto 30px auto;
+            padding: 40px 50px;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* CABEÇALHO (LOGO) */
+        header {
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24pt;
+            font-weight: 800;
+            color: var(--brand-blue);
+        }
+
+        /* Recriando o P estilizado com CSS/SVG */
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            fill: var(--brand-orange);
+        }
+        .logo-text {
+            color: #1a365d;
+        }
+
+        /* TÍTULOS */
+        h1 {
+            text-align: center;
+            font-size: 14pt;
+            text-transform: uppercase;
+            color: #1a365d; /* Azul mais escuro para títulos */
+            margin-bottom: 30px;
+            letter-spacing: 0.5px;
+            font-weight: 800;
+        }
+
+        h2 {
+            font-size: 11pt;
+            text-transform: uppercase;
+            color: #1a365d;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+
+        h3 {
+            font-size: 10pt;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--brand-blue);
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+            font-size: 10pt;
+        }
+
+        /* BOX DAS PARTES (Contratante/Contratada) */
+        .parties-box {
+            background-color: #f0f0f0;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-left: 10px solid #cbd5e0; /* Detalhe visual sutil */
+        }
+
+        .party-block {
+            margin-bottom: 15px;
+        }
+        .party-block:last-child {
+            margin-bottom: 0;
+        }
+
+        .party-title {
+            font-weight: 800;
+            color: var(--brand-blue);
+            text-transform: uppercase;
+            font-size: 10pt;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .party-desc {
+            font-size: 9pt;
+            color: var(--text-main);
+            line-height: 1.4;
+        }
+
+        /* FLUXOGRAMA VISUAL (TIMELINE) */
+        .process-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin: 40px 0;
+            position: relative;
+        }
+
+        .flow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 22%;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Ícones circulares e retangulares */
+        .icon-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .bg-blue { background-color: #0099cc; }
+        .bg-orange { background-color: #f6ad55; }
+        .bg-payment { 
+            background-color: #f6ad55; 
+            border-radius: 15px; /* Formato retangular do último item */
+            width: 70px;
+        }
+
+        .icon-svg {
+            width: 30px;
+            height: 30px;
+            fill: var(--white);
+        }
+
+        .step-label {
+            font-size: 8pt;
+            font-weight: 800;
+            text-transform: uppercase;
+            text-align: center;
+            color: var(--text-main);
+        }
+
+        /* Tags de Tempo (Pequenos balões amarelos) */
+        .time-tag {
+            position: absolute;
+            top: 5px;
+            right: -30px;
+            background-color: #ecc94b;
+            color: #744210;
+            font-size: 6pt;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 4px;
+            white-space: nowrap;
+            box-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        /* Setas de conexão */
+        .flow-arrow {
+            flex-grow: 1;
+            height: 2px;
+            background: #cbd5e0;
+            margin-top: 30px; /* Alinha com o centro dos círculos */
+            position: relative;
+        }
+        .flow-arrow::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: -4px;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-left: 5px solid #cbd5e0;
+        }
+
+        /* TABELA DE PREÇOS (CARDS) */
+        .price-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .price-card {
+            border: 2px solid var(--brand-blue);
+            border-radius: 10px;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .price-header {
+            background-color: var(--white);
+            color: var(--brand-blue);
+            padding: 10px 5px;
+            font-size: 7pt;
+            font-weight: 800;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--brand-blue);
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Variação para destaque (ex: cor laranja no header) se necessário */
+        .price-header.highlight {
+            color: #d69e2e; 
+            border-bottom-color: #d69e2e;
+        }
+        .price-card.highlight {
+            border-color: #d69e2e;
+        }
+
+        .price-value {
+            padding: 15px 5px;
+            font-size: 11pt;
+            font-weight: 800;
+            color: var(--text-main);
+            background-color: #fff;
+        }
+
+        /* RODAPÉ */
+        footer {
+            margin-top: auto;
+            text-align: center;
+            font-size: 9pt;
+            font-weight: 700;
+            color: var(--brand-blue);
+            border-top: 1px solid #e2e8f0;
+            padding-top: 10px;
+        }
+
+        /* CLÁUSULAS */
+        .clause-title {
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        /* MODO DE IMPRESSÃO */
+        @media print {
+            body { margin: 0; background: none; }
+            .page { margin: 0; border: none; box-shadow: none; break-after: always; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page">
+        <header>
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 100 100">
+                    <path d="M20,20 L50,20 C70,20 80,35 80,50 C80,65 70,80 50,80 L40,80 L40,100 L20,100 Z" fill="#2c5282"/>
+                    <path d="M40,35 L50,35 C60,35 65,42 65,50 C65,58 60,65 50,65 L40,65 Z" fill="#f6ad55"/>
+                </svg>
+                <span class="logo-text">Pubble</span>
+            </div>
+        </header>
+
+        <h1>CONTRATO DE PRESTAÇÃO DE SERVIÇOS</h1>
+
+        <div class="parties-box">
+            <div class="party-block">
+                <span class="party-title">CONTRATANTE</span>
+                <span class="party-desc">(descrição com tipo da empresa, endereço completo, CNPJ e dados completos do sócio, proprietário ou representante legal).</span>
+            </div>
+            <div class="party-block">
+                <span class="party-title">CONTRATADA</span>
+                <span class="party-desc">(descrição com tipo da empresa ou profissional, endereço completo, CNPJ ou CPF, e dados completos do sócio, proprietário ou representante legal).</span>
+            </div>
+        </div>
+
+        <p>
+            As partes acima identificadas têm, entre si, justo e acertado o presente Contrato de Prestação de Serviços de Marketing Digital, que se regerá pelas cláusulas seguintes e pelas condições descritas no presente.
+        </p>
+
+        <h2>DO OBJETO DO CONTRATO</h2>
+        <p>
+            <span class="clause-title">Cláusula 1ª.</span> O objeto deste Contrato consiste na realização de serviços de redação, de marketing direto, o qual compreende a criação de textos publicitários, posts de blog, auxílio no desenvolvimento e implantação de campanhas de marketing, online e offline, nos diversos mercados de sua atuação, incluindo-se também ações e serviços relacionados à CONTRATANTE e aos seus respectivos clientes.
+        </p>
+
+        <h2>DOS SERVIÇOS</h2>
+
+        <div class="process-flow">
+            <div class="flow-step">
+                <div class="icon-circle bg-blue">
+                    <svg class="icon-svg" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                </div>
+                <span class="step-label">Solicitação</span>
+            </div>
+
+            <div class="flow-arrow"></div>
+
+            <div class="flow-step">
+                <div class="icon-circle bg-orange">
+                    <svg class="icon-svg" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.58 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+                    <div class="time-tag">2 DIAS<br>ÚTEIS</div>
+                </div>
+                <span class="step-label">Execução</span>
+            </div>
+
+            <div class="flow-arrow"></div>
+
+            <div class="flow-step">
+                <div class="icon-circle bg-blue">
+                    <svg class="icon-svg" viewBox="0 0 24 24"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18-.21 0-.41-.06-.57-.18l-7.9-4.44A.991.991 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44A.99.99 0 0 1 12 2c.21 0 .41.06.57.18l7.9 4.44c.32.17.53.5.53.88v9zM12 4.15L6.04 7.5 12 10.85l5.96-3.35L12 4.15z"/></svg>
+                </div>
+                <span class="step-label">Entrega</span>
+            </div>
+
+            <div class="flow-arrow"></div>
+
+            <div class="flow-step">
+                <div class="icon-circle bg-payment">
+                    <svg class="icon-svg" viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+                    <div class="time-tag">5 DIAS<br>ÚTEIS</div>
+                </div>
+                <span class="step-label">Pagamento</span>
+            </div>
+        </div>
+
+        <p>
+            <span class="clause-title">Cláusula 2ª.</span> A CONTRATADA prestará à CONTRATANTE serviços de redação, produção de conteúdo para site/blog dos clientes da CONTRATANTE, com uma quantidade mínima de...
+        </p>
+
+        <footer>
+            1/4
+        </footer>
+    </div>
+
+    <div class="page">
+        <header>
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 100 100">
+                    <path d="M20,20 L50,20 C70,20 80,35 80,50 C80,65 70,80 50,80 L40,80 L40,100 L20,100 Z" fill="#2c5282"/>
+                    <path d="M40,35 L50,35 C60,35 65,42 65,50 C65,58 60,65 50,65 L40,65 Z" fill="#f6ad55"/>
+                </svg>
+                <span class="logo-text">Pubble</span>
+            </div>
+        </header>
+
+        <p>
+            ...XX publicações no mês, além de eventuais textos publicitários para os meios online e offline.
+        </p>
+        <p>
+            Parágrafo Primeiro. A CONTRATADA executará o serviço de redação mediante prévia e expressa solicitação da CONTRATANTE, correndo única e exclusivamente por conta da CONTRATANTE todos os custos necessários à execução.
+        </p>
+        <p>
+            Parágrafo Segundo: As publicações somente serão consideradas contratadas após prévia e expressa autorização da CONTRATANTE, ficando à cargo da CONTRATANTE, após a referida autorização e recebimento das Publicações, o pagamento do preço previsto na Cláusula 3ª.
+        </p>
+
+        <h2>DO PREÇO, FORMA E CONDIÇÕES DE PAGAMENTO</h2>
+        <p>
+            <span class="clause-title">Cláusula 3ª.</span> A produção do conteúdo será feita da seguinte forma, com os seguintes valores:
+        </p>
+
+        <div class="price-grid">
+            <div class="price-card highlight">
+                <div class="price-header highlight">
+                    Publicações de até<br>1.000 Palavras
+                </div>
+                <div class="price-value">R$ XXXX,00</div>
+            </div>
+
+            <div class="price-card">
+                <div class="price-header">
+                    Publicações de até<br>2.000 Palavras
+                </div>
+                <div class="price-value">R$ XXXX,00</div>
+            </div>
+
+            <div class="price-card highlight">
+                <div class="price-header highlight">
+                    Publicações de até<br>3.000 Palavras
+                </div>
+                <div class="price-value">R$ XXXX,00</div>
+            </div>
+
+            <div class="price-card">
+                <div class="price-header">
+                    Publicações de até<br>4.000 Palavras
+                </div>
+                <div class="price-value">R$ XXXX,00</div>
+            </div>
+        </div>
+
+        <p>
+            Parágrafo Primeiro. A CONTRATANTE pagará à CONTRATADA o valor estipulado acima, mediante comprovação dos textos escritos, o qual deverá ser transferido, para conta bancária a ser indicada, até o 5º dia do mês subsequente ao serviço prestado.
+        </p>
+        <p>
+            Parágrafo Segundo. O pagamento será feito de forma proporcional aos dias prestados, caso, no primeiro mês o início das atividades não se dê no 1º dia do mês.
+        </p>
+        <p>
+            Parágrafo Terceiro. O início das atividades, para todos os efeitos, se dá no momento da assinatura do presente contrato.
+        </p>
+
+        <h2>DO PRAZO DE VIGÊNCIA</h2>
+        <p>
+            <span class="clause-title">Cláusula 4ª.</span> O presente contrato tem prazo de vigência de x (xxxx) meses, podendo ser prorrogado, por interesse das partes, mediante assinatura de termo aditivo.
+        </p>
+        <p>
+            Parágrafo Primeiro. Em caso de rescisão deste contrato, qualquer das partes poderá resolvê-lo mediante prévia comunicação escrita à outra parte, com antecedência mínima de 30 (quinze) dias.
+        </p>
+
+        <footer>
+            2/4
+        </footer>
+    </div>
+
+</body>
+</html>

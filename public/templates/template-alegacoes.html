@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alegações Finais - Visual Law</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* --- CONFIGURAÇÕES GERAIS --- */
+        :root {
+            --primary-color: #591313; /* Vinho/Marsala Institucional */
+            --accent-gray: #f2f2f2;   /* Cinza claro para fundos */
+            --text-dark: #333333;
+            --text-light: #666666;
+            --white: #ffffff;
+            --border-radius: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #e0e0e0;
+            color: var(--text-dark);
+            font-size: 11pt;
+            line-height: 1.5;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        /* --- FOLHA A4 --- */
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            background: var(--white);
+            margin: 30px auto;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden; /* Garante que o rodapé não vaze */
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 0; /* Rodapé cola no fundo */
+        }
+
+        /* --- CABEÇALHO --- */
+        header {
+            padding: 40px 50px 0 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .header-tag {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 10px 30px;
+            border-radius: 20px;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 10pt;
+            letter-spacing: 1px;
+            position: absolute;
+            left: 0;
+            top: 40px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+            padding-left: 50px; /* Compensa o posicionamento */
+            border-top-right-radius: 20px;
+            border-bottom-right-radius: 20px;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .logo-placeholder {
+            margin-left: auto;
+            text-align: right;
+            color: var(--primary-color);
+            font-weight: 700;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            fill: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        /* --- ENDEREÇAMENTO --- */
+        .addressing {
+            text-align: center;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 12pt;
+            margin: 0 50px 30px 50px;
+        }
+
+        /* --- CAIXA DOS AUTOS --- */
+        .case-number-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-right: 50px;
+            margin-bottom: 30px;
+        }
+
+        .case-number-box {
+            background-color: #e6e6e6;
+            padding: 8px 25px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 10pt;
+            color: var(--text-dark);
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+        }
+
+        /* --- CONTEÚDO PRINCIPAL --- */
+        .content {
+            padding: 0 50px;
+            flex-grow: 1; /* Empurra o rodapé para baixo */
+        }
+
+        .qualification {
+            text-align: justify;
+            margin-bottom: 20px;
+        }
+
+        .transition-text {
+            text-align: center;
+            font-weight: 700;
+            margin: 30px 0;
+        }
+
+        /* --- TÍTULOS DE SEÇÃO COM LINHA --- */
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            margin-top: 10px;
+        }
+
+        .section-title {
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--text-dark);
+            margin-right: 15px;
+            font-size: 11pt;
+            white-space: nowrap;
+        }
+
+        .section-line {
+            height: 2px;
+            background-color: var(--primary-color);
+            width: 100%;
+            border-radius: 2px;
+        }
+
+        /* --- CARDS DE HISTÓRICO (ELEMENTO VISUAL LAW) --- */
+        .history-card {
+            border: 1px solid var(--primary-color);
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            background-color: var(--white);
+        }
+
+        .card-icon-container {
+            width: 50px;
+            height: 50px;
+            border: 2px solid var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+        .card-icon {
+            width: 24px;
+            height: 24px;
+            fill: var(--primary-color);
+        }
+
+        .card-text {
+            font-size: 10pt;
+            color: var(--text-dark);
+            text-align: justify;
+            line-height: 1.4;
+        }
+
+        /* --- CORPO DE TEXTO --- */
+        .body-text {
+            text-align: justify;
+            margin-bottom: 20px;
+            text-indent: 30px;
+        }
+
+        /* --- RODAPÉ --- */
+        footer {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 30px 50px;
+            margin-top: 50px;
+            border-top-left-radius: 60px; /* Efeito curvo da imagem */
+            font-size: 9pt;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .footer-col {
+            padding: 0 10px;
+        }
+
+        .footer-col.center {
+            text-align: center;
+            border-left: 1px solid rgba(255,255,255,0.3);
+            border-right: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .footer-col.right {
+            text-align: right;
+        }
+
+        .footer-link {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* --- MODO IMPRESSÃO --- */
+        @media print {
+            body { margin: 0; background: none; }
+            .page { 
+                margin: 0; 
+                box-shadow: none; 
+                width: 100%; 
+                min-height: 100vh;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page">
+        <header>
+            <div class="header-tag">ALEGAÇÕES FINAIS</div>
+            
+            <div class="logo-placeholder">
+                <svg class="logo-icon" viewBox="0 0 24 24">
+                    <path d="M12 2L2 22h20L12 2zm0 4l6 12H6l6-12z"/>
+                    <path d="M10 12h4v4h-4z"/>
+                </svg>
+                SUA LOGO
+            </div>
+        </header>
+
+        <div class="addressing">
+            AO JUÍZO DE DIREITO DA _____ VARA CRIMINAL DA COMARCA DE ___________ DO ESTADO DE ______.
+        </div>
+
+        <div class="case-number-container">
+            <div class="case-number-box">
+                AUTOS Nº: NNNNNNN-DD.AAAA.J.TR
+            </div>
+        </div>
+
+        <div class="content">
+            
+            <div class="qualification">
+                <strong>FULANO DE TAL</strong>, brasileiro, estado civil, empresário, se solteiro.<br>
+                <strong>Rua:</strong> das Laranjeiras, nº 999. Belo Horizonte/MG;<br>
+                <strong>RG:</strong> 99.999.999-9 <strong>CPF:</strong> 999.999.999-99.
+            </div>
+
+            <div class="transition-text">
+                Por meio de memoriais suas ALEGAÇÕES FINAIS, onde segue:
+            </div>
+
+            <div class="section-header">
+                <span class="section-title">BREVE HISTÓRICO</span>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="history-card">
+                <div class="card-icon-container">
+                    <svg class="card-icon" viewBox="0 0 24 24">
+                        <path d="M13.56 5.86l1.79 1.79c.29.29.29.77 0 1.06l-7.79 7.79c-.29.29-.77.29-1.06 0l-1.79-1.79c-.29-.29-.29-.77 0-1.06l7.79-7.79c.29-.29.77-.29 1.06 0zm-7.73 8.85l1.06-1.06-1.79-1.79-1.06 1.06 1.79 1.79zm12.31-7.07l-1.79-1.79c-.29-.29-.77-.29-1.06 0l-1.12 1.12 2.85 2.85 1.12-1.12c.29-.29.29-.77 0-1.06zM2 18v2h5v-2H2zm17-6h-3v-2h3v2zm0 4h-3v-2h3v2zm0 4h-3v-2h3v2z"/>
+                    </svg>
+                </div>
+                <div class="card-text">
+                    O acusado responde a esta ação penal pelo suposto envolvimento no delito de <strong>[Inserir Delito]</strong>, enquadrado no artigo 999/99.
+                </div>
+            </div>
+
+            <div class="history-card">
+                <div class="card-icon-container">
+                    <svg class="card-icon" viewBox="0 0 24 24">
+                        <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                    </svg>
+                </div>
+                <div class="card-text">
+                    Segundo a inicial acusatória o acusado teria: (...) lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                </div>
+            </div>
+
+            <div class="history-card">
+                <div class="card-icon-container">
+                    <svg class="card-icon" viewBox="0 0 24 24">
+                        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                    </svg>
+                </div>
+                <div class="card-text">
+                    No decorrer da instrução criminal foram ouvidas as testemunhas que relataram (...) lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                </div>
+            </div>
+
+            <div class="section-header">
+                <span class="section-title">PROVAS</span>
+                <div class="section-line"></div>
+            </div>
+
+            <p class="body-text">
+                Ainda que induzam as declarações das testemunhas em audiência, há fragilidade nas provas e encontramos divergências nos depoimentos prestados em juízo, tal como, no relato em delegacia, onde com a confecção de retrato falado demonstra que os indivíduos possuem características diferentes do acusado.
+            </p>
+
+        </div>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-col">
+                    Endereço do seu escritório, 999,<br>
+                    CEP: 88203-100,<br>
+                    Cidade - XX.
+                </div>
+
+                <div class="footer-col center">
+                    (99) 9999-9999 | (99) 9999-9999<br>
+                    <a href="#" class="footer-link">seuemail@seuemail.com.br</a><br>
+                    <a href="#" class="footer-link">seusite.com.br</a>
+                </div>
+
+                <div class="footer-col right">
+                    <strong>Seu Nome</strong><br>
+                    OAB 999.999
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+</body>
+</html>
